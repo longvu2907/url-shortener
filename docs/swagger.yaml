@@ -1,0 +1,166 @@
+basePath: /
+definitions:
+  controllers.GetUrlResponse:
+    properties:
+      data: {}
+      message:
+        type: string
+    type: object
+  controllers.LoginRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  controllers.LoginResponse:
+    properties:
+      token:
+        type: string
+    type: object
+  controllers.RegisterRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  controllers.RegisterResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  controllers.UrlCreationRequest:
+    properties:
+      url:
+        type: string
+    required:
+    - url
+    type: object
+  controllers.UrlCreationResponse:
+    properties:
+      data: {}
+      message:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: Generate short link
+  title: URL Shortener
+  version: "1.0"
+paths:
+  /{shortUrl}:
+    get:
+      description: Redirect short url
+      parameters:
+      - description: Short Url
+        in: path
+        name: shortUrl
+        required: true
+        type: string
+      responses: {}
+      summary: Redirect short url
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Login your account
+      parameters:
+      - description: Login data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Login response
+          schema:
+            $ref: '#/definitions/controllers.LoginResponse'
+      summary: Login
+      tags:
+      - auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Register new account
+      parameters:
+      - description: Register data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.RegisterResponse'
+      summary: Register
+      tags:
+      - auth
+  /url-shortener/create-short-url:
+    post:
+      consumes:
+      - application/json
+      description: Create short url
+      parameters:
+      - description: Create short url data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.UrlCreationRequest'
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.UrlCreationResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Create short url
+      tags:
+      - url-shortener
+  /url-shortener/url-list:
+    get:
+      consumes:
+      - application/json
+      description: Get short url list
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.GetUrlResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get short url list
+      tags:
+      - url-shortener
+swagger: "2.0"
